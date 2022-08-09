@@ -1,0 +1,34 @@
+﻿@page "/questionaries"
+@using BlazorPOC2.Shared.Models
+@inject HttpClient Http
+@{
+}
+@if (questions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var question in questions)
+    {
+        <h5>@questionIndex  @question.Text </h5>
+        @if(question.Type == QuestionType.SelectOne)
+        {
+           <BlazorPOC2.Client.Pages.Components.SelectOne></BlazorPOC2.Client.Pages.Components.SelectOne>
+        }
+        <br />
+        questionIndex++;
+    }
+}
+
+@code {
+    int questionIndex = 1;
+
+    private List<Question>? questions;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        questions = await Http.GetFromJsonAsync<List<Question>>("Question");
+    }
+
+}

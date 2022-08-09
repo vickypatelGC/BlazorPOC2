@@ -1,0 +1,11 @@
+﻿<h3>Component</h3>
+
+<InputRadioGroup @bind-key="question.QuestionId" @bind-Value="question.SelectedOption">
+    @foreach (var option in question.Options)
+    {
+        <InputRadio Value="option.Text" />
+        <text>nbsp</text>
+        @option.Text
+        <br>
+    }
+</InputRadioGroup>
