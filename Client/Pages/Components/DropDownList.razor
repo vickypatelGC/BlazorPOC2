@@ -1,0 +1,19 @@
+﻿@using BlazorPOC2.Shared.Models
+
+<div class="form-group">
+    <select class="form-control">
+    <option value="Select" selected>(Choose)</option>
+    @foreach (var option in question.Options)
+    {
+        <option value="@option.OptionId"> @option.Text</option>
+    }
+</select>
+</div>
+
+@code {
+
+    [Parameter]
+
+    public Question question { get; set; }
+
+}

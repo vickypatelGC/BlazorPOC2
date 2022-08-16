@@ -1,0 +1,7 @@
+﻿@using BlazorPOC2.Shared.Models
+    <InputDate class="form-control" @bind-Value="date" @bind-Value:format="dd/MM/yyyy" />
+@code {
+    [Parameter]
+    public Question question { get; set; }
+    private DateTime? date = null;
+}

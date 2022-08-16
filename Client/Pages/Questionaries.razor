@@ -1,7 +1,6 @@
 ﻿@page "/questionaries"
 @using BlazorPOC2.Shared.Models
 @inject HttpClient Http
-@inject IJSRuntime JsRuntime
 
 @if (questions == null)
 {
@@ -9,53 +8,117 @@
 }
 else
 {
-    @foreach (var question in questions.Where(p => p.Type == QuestionType.SelectOne))
-    {
-        <h5>@questionIndex  @question.Text </h5>
 
-        var componentParams = new Dictionary<string, object>() { { "question", question },
-        //{ "OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged)}
-        };
-        Type componentType = null;
-
-        switch (question.Type)
+    <div class="question-center">
+        @if (question != null)
         {
-            case  QuestionType.SelectOne:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.SelectOne);
-                break;
-            case QuestionType.MultiCheckBox:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.MultiCheckBox);
-                break;
-            case QuestionType.Text:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.TextBox);
-                break;
-            case QuestionType.Textarea:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.TextArea);
-                break;
+            <h5>@questionIndex  @question.Text </h5>
+            if (componentType != null)
+            {
+                <DynamicComponent Type="componentType" Parameters="componentParams"></DynamicComponent>
+                <br />
+            }
+            if (isDisplayNext)
+            {
+                <button class="btn btn-primary" @onclick="OnNext"> Next </button>
+            }
+            if (isDisplayCountinue)
+            {
+                <button class="btn btn-primary"> Countinue </button>
+            }
         }
-
-        if (componentType!= null)
-        {
-            <DynamicComponent Type="componentType" Parameters="componentParams"></DynamicComponent>
-            <br />
-        }
-        questionIndex++;
-    }
+    </div>
 }
 
 @code {
 
     int questionIndex = 1;
+    Type componentType = null;
     private List<Question>? questions;
+    private Question question;
+    Dictionary<string, object> componentParams;
+    bool isDisplayNext = false;
+    bool isDisplayCountinue = false;
+
     protected override async Task OnInitializedAsync()
     {
         questions = await Http.GetFromJsonAsync<List<Question>>("Question");
+        if (questions != null && questions.Count > 0)
+        {
+            LoadCompenent(questions[questionIndex - 1]);
+        }
     }
+
 
     public void OnSelectOneChanged(ChangeEventArgs e)
     {
-        Console.WriteLine("Clicked!!!!!  " + e.Value);
-        //await JsRuntime.InvokeVoidAsync("alert", (bool?)e.Value);
+        int nextIndex = questionIndex + 1;
+        if (nextIndex <= questions.Count)
+        {
+            questionIndex++;
+            LoadCompenent(questions[questionIndex - 1]);
+        }
+        else
+            isDisplayNext = false;
     }
 
+    public void OnNext()
+    {
+        int nextIndex = questionIndex + 1;
+        if (nextIndex <= questions.Count)
+        {
+            questionIndex++;
+            LoadCompenent(questions[questionIndex - 1]);
+        }
+        else
+            isDisplayNext = false;
+    }
+    public void LoadCompenent(Question que)
+    {
+        question = que;
+        componentParams = new Dictionary<string, object>() { { "question", que }, { "OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged) } };
+        switch (que.Type)
+        {
+            case QuestionType.SelectOne:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.SelectOne);
+                componentParams = new Dictionary<string, object>() { { "question", que }, { "OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged) } };
+                break;
+            case QuestionType.MultiCheckBox:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.MultiCheckBox);
+                componentParams = new Dictionary<string, object>() { { "question", que } };
+                isDisplayNext = true;
+                break;
+            case QuestionType.CheckBox:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.CheckBox);
+                componentParams = new Dictionary<string, object>() { { "question", que } };
+
+                break;
+            case QuestionType.Text:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.TextBox);
+                componentParams = new Dictionary<string, object>() { { "question", que } };
+                isDisplayNext = true;
+                break;
+            case QuestionType.Textarea:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.TextArea);
+                componentParams = new Dictionary<string, object>() { { "question", que } };
+                isDisplayNext = true;
+                break;
+            case QuestionType.DropDown:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.DropDownList);
+                componentParams = new Dictionary<string, object>() { { "question", que } };
+                isDisplayNext = true;
+                break;
+            case QuestionType.Date:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.DatePicker);
+                componentParams = new Dictionary<string, object>() { { "question", que } };
+                isDisplayNext = true;
+                break;
+        }
+
+        if (questionIndex == questions.Count)
+        {
+            isDisplayNext = false;
+            isDisplayCountinue = true;
+        }
+    }
 }

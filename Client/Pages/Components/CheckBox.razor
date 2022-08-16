@@ -1,0 +1,17 @@
+﻿@using BlazorPOC2.Shared.Models
+
+
+@foreach (var option in question.Options)
+{
+    <input type="checkbox" id="@question.QuestionId" />
+    <label class="px-2"> @option.Text </label>
+    <br />
+}
+
+@code {
+
+    [Parameter]
+
+    public Question question { get; set; }
+
+}
