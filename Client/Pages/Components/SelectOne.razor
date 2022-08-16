@@ -1,11 +1,47 @@
-﻿<h3>Component</h3>
+﻿@using BlazorPOC2.Shared.Models
 
-<InputRadioGroup @bind-key="question.QuestionId" @bind-Value="question.SelectedOption">
+<InputRadioGroup @bind-Value="question.SelectedOption">
     @foreach (var option in question.Options)
     {
-        <InputRadio Value="option.Text" />
-        <text>nbsp</text>
-        @option.Text
+        <InputRadio Value="option.Text" @onchange="YourSex" />
+        <span class="px-2"> @option.Text </span>
         <br>
     }
 </InputRadioGroup>
+
+
+
+<div class="form-group">
+    <label>Select sex:</label>
+    <input type="radio" name="sex" value="Male" @onchange="YourSex" />Male
+    <input type="radio" name="sex" value="Female" @onchange="YourSex" />Female
+</div>
+
+<input class="form-control form-control-sm" type="number" step="any"
+        @oninput="OnSelectOneChange" @bind-value="question.Text" />
+
+
+@code{
+
+    [Parameter]
+    public Question question { get; set; }
+
+    //[Parameter]
+    //public EventCallback<ChangeEventArgs> OnSelectOneChanged { get; set; }
+
+    public string SexValue { get; set; }
+
+    private void YourSex(ChangeEventArgs e)
+    {
+        SexValue = e.Value as string;
+    }
+
+    public void OnSelectOneChange(ChangeEventArgs e)
+    {
+        //Console.WriteLine("Clicked!!!!!  " + e.Value);
+        //await JsRuntime.InvokeVoidAsync("alert", (bool?)e.Value);
+
+
+    }
+
+}

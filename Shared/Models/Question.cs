@@ -44,10 +44,9 @@ namespace BlazorPOC2.Shared.Models
         public string PlaceholderText { get; set; }
         public bool IsReviewQuestion { get; set; }
         public QuestionType Type { get; set; }
-
         public List<QuestionOption> Options { get; set; }
-
         public string SelectedOption { get; set; }
+        public string Answer { get; set; }
 
     }
 
@@ -56,8 +55,6 @@ namespace BlazorPOC2.Shared.Models
         public int OptionId { get; set; }
         public string Text { get; set; }
         public int Sequance { get; set; }
-
-        
 
         public FrontendAction FrontendAction { get; set; }
         public BackendAction BackendAction { get; set; }

@@ -23,6 +23,8 @@ namespace BlazorPOC2.Shared.Common
               new Question { QuestionId = 7 ,  Text = "Do you have chest pain or tightness?" , Type = QuestionType.SelectOne , Options =new List<QuestionOption> { new QuestionOption { Text = "Yes", Sequance = 1 , OptionId = 1 } , new QuestionOption { Text = "No", Sequance = 2, OptionId = 2 } } },
               new Question { QuestionId = 8 ,  Text = "Do you take angina medicines, nitrates, poppers or recreational drugs?" , Type = QuestionType.SelectOne , Options =new List<QuestionOption> { new QuestionOption { Text = "Yes", Sequance = 1 , OptionId = 1 } , new QuestionOption { Text = "No", Sequance = 2, OptionId = 2 } } },
               new Question { QuestionId = 9 ,  Text = "Is there anything else you want to add?" , Type = QuestionType.SelectOne , Options =new List<QuestionOption> { new QuestionOption { Text = "Yes", Sequance = 1 , OptionId = 1 } , new QuestionOption { Text = "No", Sequance = 2, OptionId = 2 } } },
+              new Question { QuestionId = 10 , Text = "Please enter any additional information here" , Type = QuestionType.Text },
+              new Question { QuestionId = 11 , Text = "Please enter any additional information here" , Type = QuestionType.Textarea },
 
             };
 

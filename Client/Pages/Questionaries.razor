@@ -1,34 +1,61 @@
 ﻿@page "/questionaries"
 @using BlazorPOC2.Shared.Models
 @inject HttpClient Http
-@{
-}
+@inject IJSRuntime JsRuntime
+
 @if (questions == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    @foreach (var question in questions)
+    @foreach (var question in questions.Where(p => p.Type == QuestionType.SelectOne))
     {
         <h5>@questionIndex  @question.Text </h5>
-        @if(question.Type == QuestionType.SelectOne)
+
+        var componentParams = new Dictionary<string, object>() { { "question", question },
+        //{ "OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged)}
+        };
+        Type componentType = null;
+
+        switch (question.Type)
         {
-           <BlazorPOC2.Client.Pages.Components.SelectOne></BlazorPOC2.Client.Pages.Components.SelectOne>
+            case  QuestionType.SelectOne:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.SelectOne);
+                break;
+            case QuestionType.MultiCheckBox:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.MultiCheckBox);
+                break;
+            case QuestionType.Text:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.TextBox);
+                break;
+            case QuestionType.Textarea:
+                componentType = typeof(BlazorPOC2.Client.Pages.Components.TextArea);
+                break;
         }
-        <br />
+
+        if (componentType!= null)
+        {
+            <DynamicComponent Type="componentType" Parameters="componentParams"></DynamicComponent>
+            <br />
+        }
         questionIndex++;
     }
 }
 
 @code {
-    int questionIndex = 1;
 
+    int questionIndex = 1;
     private List<Question>? questions;
-    
     protected override async Task OnInitializedAsync()
     {
         questions = await Http.GetFromJsonAsync<List<Question>>("Question");
+    }
+
+    public void OnSelectOneChanged(ChangeEventArgs e)
+    {
+        Console.WriteLine("Clicked!!!!!  " + e.Value);
+        //await JsRuntime.InvokeVoidAsync("alert", (bool?)e.Value);
     }
 
 }
