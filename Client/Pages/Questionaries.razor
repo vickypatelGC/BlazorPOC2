@@ -20,11 +20,11 @@ else
             }
             if (isDisplayNext)
             {
-                <button class="btn btn-primary" @onclick="OnNext"> Next </button>
+                <button class="btn btn-primary" disabled=@IsDisabled @onclick="OnNext"> Next </button>
             }
             if (isDisplayCountinue)
             {
-                <button class="btn btn-primary"> Countinue </button>
+                <button class="btn btn-primary" disabled=@IsDisabled> Countinue </button>
             }
         }
     </div>
@@ -39,6 +39,7 @@ else
     Dictionary<string, object> componentParams;
     bool isDisplayNext = false;
     bool isDisplayCountinue = false;
+    bool IsDisabled = false;
 
     protected override async Task OnInitializedAsync()
     {
