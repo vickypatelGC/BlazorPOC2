@@ -41,8 +41,8 @@ namespace BlazorPOC2.Client.Pages
         {
             if (!string.IsNullOrEmpty(e.Value?.ToString()))
             {
-                OnNext();
                 question.Answer = e.Value?.ToString();
+                OnNext();
             }
         }
 
@@ -114,13 +114,14 @@ namespace BlazorPOC2.Client.Pages
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}};
                     isDisplayNext = true;
-                    if (string.IsNullOrEmpty(que.Answer))
-                        IsDisabled = false;
+                    //if (string.IsNullOrEmpty(que.Answer))
+                    IsDisabled = false;
                     break;
                 case QuestionType.CheckBox:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.CheckBox);
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}};
+                    IsDisabled = false;
                     break;
                 case QuestionType.Text:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.TextBox);
@@ -163,10 +164,13 @@ namespace BlazorPOC2.Client.Pages
             }
             else
             {
-                if (componentType != typeof(BlazorPOC2.Client.Pages.Components.SelectOne))
+                if (componentType == typeof(BlazorPOC2.Client.Pages.Components.SelectOne))
                 {
-                    isDisplayNext = true;
+                    if (!string.IsNullOrEmpty(que.Answer))
+                        isDisplayNext = true;
                 }
+                else
+                    isDisplayNext = true;
                 isDisplayCountinue = false;
             }
         }
