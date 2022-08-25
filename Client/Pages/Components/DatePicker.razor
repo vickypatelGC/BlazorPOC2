@@ -1,10 +1,19 @@
 ﻿@using BlazorPOC2.Shared.Models
 
-<InputDate class="form-control" @bind-Value="date" @oninput="OnInputTextChanged" />
+<InputDate class="form-control" @bind-Value="SelectedDate" @oninput="OnInputTextChanged" />
+
 @code {
     [Parameter]
     public Question question { get; set; }
-    private DateTime? date = null;
+    private DateTime? SelectedDate = null;
     [Parameter]
     public EventCallback<ChangeEventArgs> OnInputTextChanged { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(!string.IsNullOrEmpty(question.Answer))
+        {
+            SelectedDate = Convert.ToDateTime(question.Answer);
+        }
+    }
 }
