@@ -157,7 +157,7 @@ namespace BlazorPOC2.Client.Pages
                     break;
             }
 
-            if (questionIndex == questions.Count)
+            if (questionIndex == questions?.Count)
             {
                 isDisplayNext = false;
                 isDisplayCountinue = true;
