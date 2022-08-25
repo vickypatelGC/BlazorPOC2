@@ -1,14 +1,14 @@
 ﻿@using BlazorPOC2.Shared.Models
 
 
-<InputRadioGroup @bind-Value="@question.Answer" @oninput="OnSelectOneChanged">
+@*<InputRadioGroup @bind-Value="@question.Answer" @oninput="OnSelectOneChanged">
     @foreach (var option in question.Options)
     {
         <InputRadio Value="option.Text"/>
         <span class="px-2"> @option.Text </span>
         <br>
     }
-</InputRadioGroup>
+</InputRadioGroup>*@
 
 <div class="form-group">
     @foreach (var option in question.Options)

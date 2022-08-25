@@ -86,7 +86,7 @@ namespace BlazorPOC2.Client.Pages
             else
                 isDisplayBack = true;
 
-            if (nextIndex !=0)
+            if (nextIndex != 0)
             {
                 questionIndex--;
                 LoadCompenent(questions[questionIndex - 1]);
@@ -97,7 +97,7 @@ namespace BlazorPOC2.Client.Pages
 
         public void LoadCompenent(Question que)
         {
-            
+
             question = que;
             componentParams = new Dictionary<string, object>()
             {{"question", que}, {"OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged)}};
@@ -114,7 +114,8 @@ namespace BlazorPOC2.Client.Pages
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}};
                     isDisplayNext = true;
-                    IsDisabled = false;
+                    if (string.IsNullOrEmpty(que.Answer))
+                        IsDisabled = false;
                     break;
                 case QuestionType.CheckBox:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.CheckBox);
@@ -126,27 +127,31 @@ namespace BlazorPOC2.Client.Pages
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
                     isDisplayNext = true;
-                    IsDisabled = true;
+                    if (string.IsNullOrEmpty(que.Answer))
+                        IsDisabled = true;
                     break;
                 case QuestionType.Textarea:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.TextArea);
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
-                    IsDisabled = true;
+                    if (string.IsNullOrEmpty(que.Answer))
+                        IsDisabled = true;
                     isDisplayNext = true;
                     break;
                 case QuestionType.DropDown:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.DropDownList);
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
-                    IsDisabled = true;
+                    if (string.IsNullOrEmpty(que.Answer))
+                        IsDisabled = true;
                     isDisplayNext = true;
                     break;
                 case QuestionType.Date:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.DatePicker);
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
-                    IsDisabled = true;
+                    if (string.IsNullOrEmpty(que.Answer))
+                        IsDisabled = true;
                     isDisplayNext = true;
                     break;
             }
@@ -158,7 +163,7 @@ namespace BlazorPOC2.Client.Pages
             }
             else
             {
-                if(componentType != typeof(BlazorPOC2.Client.Pages.Components.SelectOne))
+                if (componentType != typeof(BlazorPOC2.Client.Pages.Components.SelectOne))
                 {
                     isDisplayNext = true;
                 }
