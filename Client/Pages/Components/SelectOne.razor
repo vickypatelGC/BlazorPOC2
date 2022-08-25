@@ -1,14 +1,14 @@
 ﻿@using BlazorPOC2.Shared.Models
 
 
-@*<InputRadioGroup ValueChanged="@((e) => OnRadiochange(e))" TValue="string" ValueExpression="() => question.SelectedOption">
+<InputRadioGroup @bind-Value="@question.Answer" @oninput="OnSelectOneChanged">
     @foreach (var option in question.Options)
     {
         <InputRadio Value="option.Text"/>
         <span class="px-2"> @option.Text </span>
         <br>
     }
-</InputRadioGroup>*@
+</InputRadioGroup>
 
 <div class="form-group">
     @foreach (var option in question.Options)
@@ -26,11 +26,5 @@
 
     [Parameter]
     public EventCallback<ChangeEventArgs> OnSelectOneChanged { get; set; }
-
-
-    //private void OnRadiochange(object sender)
-    //{
-    //   string SelectedValue = (string)sender;
-    //    //StateHasChanged();
-    //}
+ 
 }

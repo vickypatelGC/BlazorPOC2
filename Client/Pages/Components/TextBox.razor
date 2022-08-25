@@ -1,7 +1,11 @@
 ﻿@using BlazorPOC2.Shared.Models
-<InputText class="form-control" @bind-Value = "@question.Answer"> </InputText>
+
+<InputText class="form-control" @bind-Value="@question.Answer" @oninput="OnInputTextChanged"> </InputText>
 @code {
     [Parameter]
 
     public Question question { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnInputTextChanged { get; set; }
 }

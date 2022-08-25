@@ -1,13 +1,14 @@
 ﻿@using BlazorPOC2.Shared.Models
 
+
 <div class="form-group">
-    <select class="form-control">
-    <option value="Select" selected>(Choose)</option>
+    <InputSelect class="form-control" @bind-Value="@question.Answer" @oninput="OnInputTextChanged">
+    <option value="" selected>(Choose)</option>
     @foreach (var option in question.Options)
     {
-        <option value="@option.OptionId"> @option.Text</option>
+            <option value="@option.Text"> @option.Text</option>
     }
-</select>
+</InputSelect>
 </div>
 
 @code {
@@ -15,5 +16,8 @@
     [Parameter]
 
     public Question question { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnInputTextChanged { get; set; }
 
 }

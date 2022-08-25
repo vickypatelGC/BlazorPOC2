@@ -8,10 +8,14 @@
 }
 else
 {
-
+    if (isDisplayBack)
+    {
+        <button class="btn btn-primary" @onclick="OnBack"> Back </button>
+    }
     <div class="question-center">
         @if (question != null)
         {
+            
             <h5>@questionIndex  @question.Text </h5>
             if (componentType != null)
             {
@@ -30,96 +34,4 @@ else
     </div>
 }
 
-@code {
 
-    int questionIndex = 1;
-    Type componentType = null;
-    private List<Question>? questions;
-    private Question question;
-    Dictionary<string, object> componentParams;
-    bool isDisplayNext = false;
-    bool isDisplayCountinue = false;
-    bool IsDisabled = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        questions = await Http.GetFromJsonAsync<List<Question>>("Question");
-        if (questions != null && questions.Count > 0)
-        {
-            LoadCompenent(questions[questionIndex - 1]);
-        }
-    }
-
-
-    public void OnSelectOneChanged(ChangeEventArgs e)
-    {
-        int nextIndex = questionIndex + 1;
-        if (nextIndex <= questions.Count)
-        {
-            questionIndex++;
-            LoadCompenent(questions[questionIndex - 1]);
-        }
-        else
-            isDisplayNext = false;
-    }
-
-    public void OnNext()
-    {
-        int nextIndex = questionIndex + 1;
-        if (nextIndex <= questions.Count)
-        {
-            questionIndex++;
-            LoadCompenent(questions[questionIndex - 1]);
-        }
-        else
-            isDisplayNext = false;
-    }
-    public void LoadCompenent(Question que)
-    {
-        question = que;
-        componentParams = new Dictionary<string, object>() { { "question", que }, { "OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged) } };
-        switch (que.Type)
-        {
-            case QuestionType.SelectOne:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.SelectOne);
-                componentParams = new Dictionary<string, object>() { { "question", que }, { "OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged) } };
-                break;
-            case QuestionType.MultiCheckBox:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.MultiCheckBox);
-                componentParams = new Dictionary<string, object>() { { "question", que } };
-                isDisplayNext = true;
-                break;
-            case QuestionType.CheckBox:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.CheckBox);
-                componentParams = new Dictionary<string, object>() { { "question", que } };
-
-                break;
-            case QuestionType.Text:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.TextBox);
-                componentParams = new Dictionary<string, object>() { { "question", que } };
-                isDisplayNext = true;
-                break;
-            case QuestionType.Textarea:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.TextArea);
-                componentParams = new Dictionary<string, object>() { { "question", que } };
-                isDisplayNext = true;
-                break;
-            case QuestionType.DropDown:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.DropDownList);
-                componentParams = new Dictionary<string, object>() { { "question", que } };
-                isDisplayNext = true;
-                break;
-            case QuestionType.Date:
-                componentType = typeof(BlazorPOC2.Client.Pages.Components.DatePicker);
-                componentParams = new Dictionary<string, object>() { { "question", que } };
-                isDisplayNext = true;
-                break;
-        }
-
-        if (questionIndex == questions.Count)
-        {
-            isDisplayNext = false;
-            isDisplayCountinue = true;
-        }
-    }
-}
