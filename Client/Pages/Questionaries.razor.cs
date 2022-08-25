@@ -33,7 +33,7 @@ namespace BlazorPOC2.Client.Pages
             questions = await Http.GetFromJsonAsync<List<Question>>("Question");
             if (questions != null && questions.Count > 0)
             {
-                LoadCompenent(questions[questionIndex]);
+                LoadCompenent();
             }
         }
 
@@ -61,7 +61,8 @@ namespace BlazorPOC2.Client.Pages
 
         public void OnNextOrBack(int moveTo)
         {
-            questionIndex = questionIndex + moveTo;
+            questionIndex += moveTo;
+
             if (questionIndex > questions.Count)
                 return;
 
@@ -78,65 +79,55 @@ namespace BlazorPOC2.Client.Pages
             else
                 isDisplayNext = true;
 
-
-            LoadCompenent(questions[questionIndex]);
+            LoadCompenent();
         }
 
-
-
-        public void LoadCompenent(Question que)
+        public void LoadCompenent()
         {
+            question = questions[questionIndex];
 
-            question = que;
-            componentParams = new Dictionary<string, object>()
-            {{"question", que}, {"OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged)}};
-            switch (que.Type)
+            componentParams = new Dictionary<string, object>(){{"question",question} };
+
+            switch (question.Type)
             {
                 case QuestionType.SelectOne:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.SelectOne);
-                    componentParams = new Dictionary<string, object>()
-                    {{"question", que}, {"OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged)}};
+                    componentParams.Add("OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged));
                     break;
                 case QuestionType.MultiCheckBox:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.MultiCheckBox);
-                    componentParams = new Dictionary<string, object>()
-                    {{"question", que}};
-                    //if (string.IsNullOrEmpty(que.Answer))
                     IsDisabled = false;
                     break;
                 case QuestionType.CheckBox:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.CheckBox);
-                    componentParams = new Dictionary<string, object>()
-                    {{"question", que}};
                     IsDisabled = false;
                     break;
                 case QuestionType.Text:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.TextBox);
-                    componentParams = new Dictionary<string, object>()
-                    {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
-                    isDisplayNext = true;
-                    if (string.IsNullOrEmpty(que.Answer))
+                    componentParams.Add("OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged));
+
+                    if (string.IsNullOrEmpty(question.Answer))
                         IsDisabled = true;
                     break;
                 case QuestionType.Textarea:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.TextArea);
-                    componentParams = new Dictionary<string, object>()
-                    {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
-                    if (string.IsNullOrEmpty(que.Answer))
+                    componentParams.Add("OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged));
+
+                    if (string.IsNullOrEmpty(question.Answer))
                         IsDisabled = true;
                     break;
                 case QuestionType.DropDown:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.DropDownList);
-                    componentParams = new Dictionary<string, object>()
-                    {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
-                    if (string.IsNullOrEmpty(que.Answer))
+                    componentParams.Add("OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged));
+
+                    if (string.IsNullOrEmpty(question.Answer))
                         IsDisabled = true;
                     break;
                 case QuestionType.Date:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.DatePicker);
-                    componentParams = new Dictionary<string, object>()
-                    {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
-                    if (string.IsNullOrEmpty(que.Answer))
+                    componentParams.Add("OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged));
+
+                    if (string.IsNullOrEmpty(question.Answer))
                         IsDisabled = true;
                     break;
             }
