@@ -65,7 +65,19 @@ namespace BlazorPOC2.Client.Pages
             if (questionIndex > questions.Count)
                 return;
 
-            isDisplayBack = (questionIndex == 0);
+            isDisplayBack = questionIndex != 0;
+            isDisplayCountinue = questionIndex == questions.Count -1;
+
+            if(questionIndex == questions.Count -1)
+                isDisplayNext = false;
+            else if (componentType == typeof(BlazorPOC2.Client.Pages.Components.SelectOne))
+            {
+                if (!string.IsNullOrEmpty(question.Answer))
+                    isDisplayNext = true;
+            }
+            else
+                isDisplayNext = true;
+
 
             LoadCompenent(questions[questionIndex]);
         }
@@ -84,13 +96,11 @@ namespace BlazorPOC2.Client.Pages
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.SelectOne);
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}, {"OnSelectOneChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnSelectOneChanged)}};
-                    isDisplayNext = false;
                     break;
                 case QuestionType.MultiCheckBox:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.MultiCheckBox);
                     componentParams = new Dictionary<string, object>()
                     {{"question", que}};
-                    isDisplayNext = true;
                     //if (string.IsNullOrEmpty(que.Answer))
                     IsDisabled = false;
                     break;
@@ -114,7 +124,6 @@ namespace BlazorPOC2.Client.Pages
                     {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
                     if (string.IsNullOrEmpty(que.Answer))
                         IsDisabled = true;
-                    isDisplayNext = true;
                     break;
                 case QuestionType.DropDown:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.DropDownList);
@@ -122,7 +131,6 @@ namespace BlazorPOC2.Client.Pages
                     {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
                     if (string.IsNullOrEmpty(que.Answer))
                         IsDisabled = true;
-                    isDisplayNext = true;
                     break;
                 case QuestionType.Date:
                     componentType = typeof(BlazorPOC2.Client.Pages.Components.DatePicker);
@@ -130,25 +138,7 @@ namespace BlazorPOC2.Client.Pages
                     {{"question", que}, {"OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged)}};
                     if (string.IsNullOrEmpty(que.Answer))
                         IsDisabled = true;
-                    isDisplayNext = true;
                     break;
-            }
-
-            if (questionIndex == questions.Count)
-            {
-                isDisplayNext = false;
-                isDisplayCountinue = true;
-            }
-            else
-            {
-                if (componentType == typeof(BlazorPOC2.Client.Pages.Components.SelectOne))
-                {
-                    if (!string.IsNullOrEmpty(que.Answer))
-                        isDisplayNext = true;
-                }
-                else
-                    isDisplayNext = true;
-                isDisplayCountinue = false;
             }
         }
     }
