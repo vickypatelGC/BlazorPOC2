@@ -19,7 +19,7 @@ namespace BlazorPOC2.Client.Pages
 {
     public partial class Questionaries
     {
-        int questionIndex = 1;
+        int questionIndex = 0;
         Type componentType = null;
         private List<Question>? questions;
         private Question question;
@@ -33,7 +33,7 @@ namespace BlazorPOC2.Client.Pages
             questions = await Http.GetFromJsonAsync<List<Question>>("Question");
             if (questions != null && questions.Count > 0)
             {
-                LoadCompenent(questions[questionIndex - 1]);
+                LoadCompenent(questions[questionIndex]);
             }
         }
 
@@ -42,7 +42,7 @@ namespace BlazorPOC2.Client.Pages
             if (!string.IsNullOrEmpty(e.Value?.ToString()))
             {
                 question.Answer = e.Value?.ToString();
-                OnNext();
+                OnNextOrBack(1);
             }
         }
 
@@ -59,41 +59,18 @@ namespace BlazorPOC2.Client.Pages
             }
         }
 
-        public void OnNext()
+        public void OnNextOrBack(int moveTo)
         {
-            int nextIndex = questionIndex + 1;
+            questionIndex = questionIndex + moveTo;
+            if (questionIndex > questions.Count)
+                return;
 
-            if (nextIndex == 0)
-                isDisplayBack = false;
-            else
-                isDisplayBack = true;
+            isDisplayBack = (questionIndex == 0);
 
-            if (nextIndex <= questions.Count)
-            {
-                questionIndex++;
-                LoadCompenent(questions[questionIndex - 1]);
-            }
-            else
-                isDisplayNext = false;
+            LoadCompenent(questions[questionIndex]);
         }
 
-        public void OnBack()
-        {
-            int nextIndex = questionIndex - 1;
 
-            if (nextIndex <= 1)
-                isDisplayBack = false;
-            else
-                isDisplayBack = true;
-
-            if (nextIndex != 0)
-            {
-                questionIndex--;
-                LoadCompenent(questions[questionIndex - 1]);
-            }
-            else
-                isDisplayNext = false;
-        }
 
         public void LoadCompenent(Question que)
         {
@@ -157,7 +134,7 @@ namespace BlazorPOC2.Client.Pages
                     break;
             }
 
-            if (questionIndex == questions?.Count)
+            if (questionIndex == questions.Count)
             {
                 isDisplayNext = false;
                 isDisplayCountinue = true;

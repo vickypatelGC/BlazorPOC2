@@ -10,7 +10,7 @@ else
 {
     if (isDisplayBack)
     {
-        <button class="btn btn-primary" @onclick="OnBack"> Back </button>
+        <button class="btn btn-primary" @onclick="() => OnNextOrBack(-1)"> Back </button>
     }
     <div class="question-center">
         @if (question != null)
@@ -24,7 +24,7 @@ else
             }
             if (isDisplayNext)
             {
-                <button class="btn btn-primary" disabled=@IsDisabled @onclick="OnNext"> Next </button>
+                <button class="btn btn-primary" disabled=@IsDisabled @onclick="() => OnNextOrBack(1)"> Next </button>
             }
             if (isDisplayCountinue)
             {
