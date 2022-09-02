@@ -15,8 +15,8 @@ else
     <div class="question-center">
         @if (question != null)
         {
-            
-            <h5>@questionIndex  @question.Text </h5>
+
+            <h5>@displayIndex  @question.Text </h5>
             if (componentType != null)
             {
                 <DynamicComponent Type="componentType" Parameters="componentParams"></DynamicComponent>

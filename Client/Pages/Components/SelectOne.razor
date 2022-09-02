@@ -4,7 +4,7 @@
 <InputRadioGroup @bind-Value="@question.Answer">
     @foreach (var option in question.Options)
     {
-        <InputRadio Value="option.Text" @oninput="OnSelectOneChanged" />
+        <InputRadio Value="option.Text" @oninput="eventArgs=>{ OnSelectOneChanged(option.OptionId, option.Text); }" />
         <span class="px-2"> @option.Text </span>
         <br>
     }
@@ -19,12 +19,12 @@
     }
 </div>*@
 
-@code{
+@code {
 
     [Parameter]
     public Question question { get; set; }
 
     [Parameter]
-    public EventCallback<ChangeEventArgs> OnSelectOneChanged { get; set; }
- 
+    public Action<int,string> OnSelectOneChanged { get; set; }
+
 }

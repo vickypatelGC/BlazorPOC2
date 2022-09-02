@@ -47,6 +47,7 @@ namespace BlazorPOC2.Shared.Models
         public List<QuestionOption> Options { get; set; }
         public string SelectedOption { get; set; }
         public string Answer { get; set; }
+        public int SelectedOptionId { get; set; }
         public DateTime SeletedDate { get; set; }
 
     }
@@ -69,6 +70,8 @@ namespace BlazorPOC2.Shared.Models
         public bool UncheckRestOptions { get; set; }
 
         public int FollowUpQuestionId { get; set; }
+
+        public  Question FollowUpQuestion { get; set; }
 
     }
 }
