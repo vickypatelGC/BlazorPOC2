@@ -3,7 +3,13 @@
 
 @foreach (var option in question.Options)
 {
-    <input type="checkbox" id="@question.QuestionId" />
+    bool Checked = false;
+    if (SelectedValues.Contains(option.Text))
+    {
+        Checked = true;
+    }
+
+    <input type="checkbox" checked=@Checked id="@question.QuestionId" @onchange="eventArgs => { CheckboxClicked(option.Text, eventArgs.Value); }" />
     <label class="px-2"> @option.Text </label>
     <br />
 }
@@ -14,4 +20,35 @@
 
     public Question question { get; set; }
 
+    public List<string> SelectedValues = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(question.Answer))
+        {
+            SelectedValues = question.Answer.Split(',').ToList();
+        }
+    }
+
+
+    public void CheckboxClicked(string aSelectedId, object aChecked)
+    {
+        if ((bool)aChecked)
+        {
+            if (!SelectedValues.Contains(aSelectedId))
+            {
+                SelectedValues.Add(aSelectedId);
+            }
+        }
+        else
+        {
+            if (SelectedValues.Contains(aSelectedId))
+            {
+                SelectedValues.Remove(aSelectedId);
+            }
+        }
+
+        question.Answer = string.Join(",", SelectedValues.ToArray());
+        //StateHasChanged();
+    }
 }

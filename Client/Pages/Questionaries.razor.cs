@@ -59,10 +59,10 @@ namespace BlazorPOC2.Client.Pages
             Question questionTobeload = moveTo == 1 ? question : questions[questionIndex];
             if (questionTobeload.Options != null && !isFollowupQuestion)
             {
-                var selectOption = questionTobeload.Options.FirstOrDefault(x => x.OptionId == questionTobeload.SelectedOptionId);
-                if (selectOption != null && selectOption.FollowUpQuestion != null)
+                var selectedOption = questionTobeload.Options.FirstOrDefault(x => x.OptionId == questionTobeload.SelectedOptionId);
+                if (selectedOption != null && selectedOption.FollowUpQuestion != null)
                 {
-                    question = selectOption.FollowUpQuestion;
+                    question = selectedOption.FollowUpQuestion;
                     isFollowupQuestion = true;
                     if (moveTo == 1)
                         questionIndex -= moveTo;
@@ -76,7 +76,7 @@ namespace BlazorPOC2.Client.Pages
 
             LoadQuestion(isFollowupQuestion);
 
-            isDisplayBack = questionIndex != 0;
+            isDisplayBack = (isFollowupQuestion ? true : questionIndex != 0) ;
             isDisplayCountinue = questionIndex == questions.Count - 1;
 
             if (questionIndex == questions.Count - 1)
@@ -120,28 +120,24 @@ namespace BlazorPOC2.Client.Pages
                 case QuestionType.Text:
                     componentType = typeof(Components.TextBox);
                     componentParams.Add("OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged));
-
                     if (string.IsNullOrEmpty(question.Answer))
                         IsDisabled = true;
                     break;
                 case QuestionType.Textarea:
                     componentType = typeof(Components.TextArea);
                     componentParams.Add("OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged));
-
                     if (string.IsNullOrEmpty(question.Answer))
                         IsDisabled = true;
                     break;
                 case QuestionType.DropDown:
                     componentType = typeof(Components.DropDownList);
                     componentParams.Add("OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged));
-
                     if (string.IsNullOrEmpty(question.Answer))
                         IsDisabled = true;
                     break;
                 case QuestionType.Date:
                     componentType = typeof(Components.DatePicker);
                     componentParams.Add("OnInputTextChanged", EventCallback.Factory.Create<ChangeEventArgs>(this, OnInputTextChanged));
-
                     if (string.IsNullOrEmpty(question.Answer))
                         IsDisabled = true;
                     break;
@@ -149,5 +145,11 @@ namespace BlazorPOC2.Client.Pages
 
             StateHasChanged();
         }
+   
+        public void SaveQuestions()
+        {
+
+        }
+    
     }
 }
