@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorPOC2.Server.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
@@ -16,10 +15,18 @@ namespace BlazorPOC2.Server.Controllers
             _logger = logger;
         }
 
+        [Route("getQuestions")]
         [HttpGet]
         public Task<List<Question>> Get()
         {
             return Task.FromResult(QuestionData.GetQuestions().ToList());
+        }
+
+        [Route("saveQuestions")]
+        [HttpPost]
+        public async Task<bool> SaveQuestions(List<QuestionAnswered> QuestionAnswers)
+        {
+            return true;
         }
     }
 }

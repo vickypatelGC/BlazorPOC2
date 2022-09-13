@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 using BlazorPOC2.Shared.Models;
 
+
 namespace BlazorPOC2.Client.Pages
 {
     public partial class Questionaries
@@ -19,7 +20,7 @@ namespace BlazorPOC2.Client.Pages
         bool isFollowupQuestion = false;
         protected override async Task OnInitializedAsync()
         {
-            questions = await Http.GetFromJsonAsync<List<Question>>("Question");
+            questions = await Http.GetFromJsonAsync<List<Question>>("getQuestions");
             if (questions != null && questions.Count > 0)
             {
                 LoadQuestion(false);
@@ -146,9 +147,35 @@ namespace BlazorPOC2.Client.Pages
             StateHasChanged();
         }
    
-        public void SaveQuestions()
+        public async Task OnCountinue()
         {
+            List<QuestionAnswered> QuestionAnswers = new List<QuestionAnswered>();
+            foreach(var question in questions)
+            {
+                QuestionAnswered questionAnswer = new QuestionAnswered { 
+                    QuestionId = question.QuestionId, 
+                    Answer = question.Answer ,
+                    SelectedOptionId= question.SelectedOptionId 
+                };
 
+                if (question.Options != null)
+                {
+                    var selectedOption = question.Options.FirstOrDefault(x => x.OptionId == question.SelectedOptionId);
+                    if (selectedOption != null && selectedOption.FollowUpQuestion != null)
+                    {
+                        questionAnswer.FollowUpQuestion = new FollowUpQuestion
+                        {
+                            QuestionId= selectedOption.FollowUpQuestion.QuestionId,
+                            SelectedOptionId = selectedOption.FollowUpQuestion.SelectedOptionId,
+                            Answer= selectedOption.FollowUpQuestion.Answer,
+                        };
+                    }
+                }
+
+                QuestionAnswers.Add(questionAnswer);
+            }
+
+            await Http.PostAsJsonAsync("saveQuestions", QuestionAnswers);
         }
     
     }

@@ -74,4 +74,20 @@ namespace BlazorPOC2.Shared.Models
         public  Question FollowUpQuestion { get; set; }
 
     }
+
+    public class QuestionAnswered
+    {
+        public int QuestionId { get; set; }
+        public string Answer { get; set; }
+        public int SelectedOptionId { get; set; }
+        public FollowUpQuestion? FollowUpQuestion { get; set; }
+    }
+
+    public class FollowUpQuestion
+    {
+        public int QuestionId { get; set; }
+        public string Answer { get; set; }
+        public int SelectedOptionId { get; set; }
+    }
+
 }
